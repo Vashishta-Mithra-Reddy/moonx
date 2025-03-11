@@ -1,15 +1,26 @@
 "use client";
 
 import { useFrame } from "@react-three/fiber";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
+import LoadingScreen from "./LoadingScreen";
 
-export default function Moon() {
+interface MoonProps {
+  onLoad: () => void;
+}
+
+export default function Moon({ onLoad }: MoonProps) {
   const moonRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF("/moonx/scene.gltf");
   const [isDragging, setIsDragging] = useState(false);
   const [previousMousePosition, setPreviousMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (scene) {
+      onLoad();
+    }
+  }, [scene, onLoad]);
 
   useFrame(({ camera }) => {
     const scrollProgress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
@@ -17,7 +28,7 @@ export default function Moon() {
     if (moonRef.current) {
       if (!isDragging) {
         const scrollRotation = scrollProgress * Math.PI * 2; // Negative value for correct rotation direction
-        const idleRotation = performance.now() * 0.0003;
+        const idleRotation = performance.now() * 0.0005;
         moonRef.current.rotation.y = scrollRotation + idleRotation;
       }
       

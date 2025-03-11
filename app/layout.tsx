@@ -1,8 +1,8 @@
 import "../styles/index.css";
 
 export const metadata = {
-  title: "Moon Experience",
-  description: "Interactive 3D Moon Experience",
+  title: "Moon",
+  description: "The Moon",
 };
 
 export default function RootLayout({
